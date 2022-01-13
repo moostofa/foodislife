@@ -6,10 +6,12 @@ def connect():
     """ Connect to MySQL database """
     conn = None
     try:
-        conn = mysql.connector.connect(host='localhost',
-                                       database='foodme',
-                                       user='root',
-                                       password='#moth3rFuzzer')
+        conn = mysql.connector.connect(
+            host='localhost',
+            database='foodme',
+            user='root',
+            password='#moth3rFuzzer'
+        )
         if conn.is_connected():
             print('Connected to MySQL database')
 
