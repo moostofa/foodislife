@@ -10,7 +10,8 @@ def get():
     response = session.get(url)
     response.html.render(sleep=1, keep_page=True, scrolldown=1)
 
-    # the fields of interest that will be saved to the DB, and the selectors/filters that will be used to find them
+    # keys: the fields of interest that will be saved to the DB, 
+    # values: the selectors/filters that will be used to extract those fields from the DOM
     fields = {
         "title": {"selector": ".listing-title"},
         "description": {"selector": ".listing-description"},
@@ -20,7 +21,8 @@ def get():
     }
 
     # iterate over all the venues & extract the required fields
-    venues = response.html.find(".venue-list-item")
+    venues: list = response.html.find(".venue-list-item")
+    restaurants = []
     for venue in venues:
         details = {}
         for key, filters in fields.items():
@@ -28,4 +30,5 @@ def get():
                 details[key] = venue.find(**filters)[0].text
             except IndexError:
                 details[key] = ""
-        print(details)
+        restaurants.append(details)
+    return restaurants
