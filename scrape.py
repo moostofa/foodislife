@@ -1,5 +1,5 @@
-# scrape a page & return a list of restuarants and a link to the next page
-def scrape(venues: list) -> dict:
+""" Scrape a page & return a list of restuarants on that page """
+def scrape(venues: list) -> list:
     # keys: the fields of interest that will be saved to the DB, 
     # values: the selectors/filters that will be used to extract those fields from the DOM
     fields = {
