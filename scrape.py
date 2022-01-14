@@ -1,14 +1,5 @@
-from requests_html import HTMLSession
-
-def scrape(url: str) -> list:
-    # create html session to visit url
-    session = HTMLSession()
-    response = session.get(url)
-    response.html.render(sleep=1, keep_page=True, scrolldown=1)
-
-    next = response.html.find(".next", first=True)
-    return next.absolute_links
-
+# scrape a page & return a list of restuarants and a link to the next page
+def scrape(venues: list) -> dict:
     # keys: the fields of interest that will be saved to the DB, 
     # values: the selectors/filters that will be used to extract those fields from the DOM
     fields = {
@@ -20,7 +11,6 @@ def scrape(url: str) -> list:
     }
 
     # iterate over all the venues & extract the required fields
-    venues: list = response.html.find(".venue-list-item")
     restaurants = []
     for venue in venues:
         details = {}

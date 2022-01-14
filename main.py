@@ -6,35 +6,24 @@ def get():
     # website to scrape data from
     website = "https://www.happycow.net/oceania/australia/new_south_wales/sydney/"
 
-    return scrape(website)
-
-    # create html session to visit webpage
+    # retrieve restaurants from first 2 pages
     session = HTMLSession()
-    response = session.get(url)
-    response.html.render(sleep=1, keep_page=True, scrolldown=1)
+    url = website
+    boom = []
+    for _ in range(2):
+        r = session.get(url)
+        r.html.render(sleep=1, keep_page=True, scrolldown=1)    # load & render JavaScript content
+        venues: list = r.html.find(".venue-list-item")
 
-    # keys: the fields of interest that will be saved to the DB, 
-    # values: the selectors/filters that will be used to extract those fields from the DOM
-    fields = {
-        "title": {"selector": ".listing-title"},
-        "description": {"selector": ".listing-description"},
-        "location": {"containing": "Sydney, New South Wales"},
-        "cuisine": {"containing": "Cuisine:"},
-        "phone": {"containing": "+61-"}
-    }
+        restaurants = scrape(venues)
+        boom.append(restaurants)
 
-    # iterate over all the venues & extract the required fields
-    venues: list = response.html.find(".venue-list-item")
-    restaurants = []
-    for venue in venues:
-        details = {}
-        for key, filters in fields.items():
-            try:
-                details[key] = venue.find(**filters)[0].text
-            except IndexError:
-                details[key] = ""
-        restaurants.append(details)
-    return restaurants
+        # save(restaurants) to database
+
+        # next page will also be scraped
+        url = list(r.html.find(".next", first=True).absolute_links)[0]
+
+    return boom
 
 if __name__ == "__main__":
     restaurants = get()
