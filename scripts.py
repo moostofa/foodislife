@@ -1,3 +1,9 @@
+"""
+Requirements:
+- pip install requests-html
+- pip install mysql-connector-python
+"""
+
 import json
 from json.decoder import JSONDecodeError
 
