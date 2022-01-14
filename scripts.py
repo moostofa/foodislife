@@ -37,7 +37,6 @@ def get_restaurants():
 
         if venues == []:
             print(f"Page {page_num} could not be scraped. Trying again...")
-
         else:
             restaurants = scrape(venues, page_num)
             save(restaurants)
@@ -48,10 +47,15 @@ def get_restaurants():
 
         # prevent infinite loop
         if page_num > MAX_PAGES:
-            print("Completed scraping. Ending script.")
-        elif iterations > MAX_ITERATIONS:
-            print("Maximum number of iterations reached. Ending script.")
+            print("Completed scraping.")
             break
+        elif iterations > MAX_ITERATIONS:
+            print("Maximum number of iterations reached. Stopping script.")
+            break
+    
+    with open("cache.json", "w") as cachefile:
+        pass
+    print("Cleared cache.")
 
 
 """ Scrape a page & return a list of restuarants on that page """

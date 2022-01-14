@@ -1,8 +1,10 @@
 import json
 from json.decoder import JSONDecodeError
+
 from requests_html import HTMLSession
-from scrape import scrape
+
 from save import save
+from scrape import scrape
 
 MAX_ITERATIONS = 10
 MAX_PAGES = 2
@@ -47,9 +49,15 @@ def get_restaurants():
         # prevent infinite loop
         if page_num > MAX_PAGES:
             print("Completed scraping.")
+            break
         elif iterations > MAX_ITERATIONS:
             print("Maximum number of iterations reached. Stopping script.")
             break
+    
+    with open("cache.json", "w") as cachefile:
+        pass
+    print("Cleared cache.")
+
 
 if __name__ == "__main__":
     get_restaurants()
