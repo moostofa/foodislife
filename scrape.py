@@ -1,5 +1,7 @@
+import json
+
 """ Scrape a page & return a list of restuarants on that page """
-def scrape(venues: list) -> list:
+def scrape(venues: list, page_num: int) -> list:
     # keys: the fields of interest that will be saved to the DB, 
     # values: the selectors/filters that will be used to extract those fields from the DOM
     fields = {
@@ -11,7 +13,7 @@ def scrape(venues: list) -> list:
     }
 
     # iterate over all the venues & extract the required fields
-    restaurants = []
+    restaurants = [{"page": page_num}]
     for venue in venues:
         details = {}
         for key, filters in fields.items():
@@ -20,4 +22,9 @@ def scrape(venues: list) -> list:
             except IndexError:
                 details[key] = ""
         restaurants.append(details)
+
+    # save this page's details in cache
+    with open("cache.json", "w") as cachefile:
+        cachefile.write(json.dumps(restaurants, indent=4))
+
     return restaurants

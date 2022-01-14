@@ -10,13 +10,12 @@ def get_restaurants():
     # retrieve restaurants from the first 2 pages
     session = HTMLSession()
     url = website
-    for _ in range(2):
+    for page_num in range(1, 3):
         r = session.get(url)
         r.html.render(sleep=1, keep_page=True, scrolldown=1)    # load & render JavaScript content
         venues: list = r.html.find(".venue-list-item")
 
-        restaurants = scrape(venues)
-
+        restaurants = scrape(venues, page_num)
         save(restaurants)
 
         # next page will also be scraped
