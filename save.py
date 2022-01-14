@@ -3,6 +3,7 @@ from mysql.connector import Error
 
 """ Connect to MySQL database & save restaurants """
 def save(restaurants: list):
+    print("Saving restaurants to database...")
     conn = None
     try:
         conn = mysql.connector.connect(
@@ -40,3 +41,4 @@ def save(restaurants: list):
     finally:
         if conn is not None and conn.is_connected():
             conn.close()
+        print("Saved restaurants to database.")

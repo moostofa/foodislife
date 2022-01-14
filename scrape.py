@@ -2,6 +2,8 @@ import json
 
 """ Scrape a page & return a list of restuarants on that page """
 def scrape(venues: list, page_num: int) -> list:
+    print(f"Scraping data from page {page_num}...")
+
     # keys: the fields of interest that will be saved to the DB, 
     # values: the selectors/filters that will be used to extract those fields from the DOM
     fields = {
@@ -26,5 +28,6 @@ def scrape(venues: list, page_num: int) -> list:
     # save this page's details in cache
     with open("cache.json", "w") as cachefile:
         cachefile.write(json.dumps(restaurants, indent=4))
-
+    
+    print(f"Completed scraping for page {page_num}.")
     return restaurants
