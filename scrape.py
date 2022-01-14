@@ -1,17 +1,13 @@
 from requests_html import HTMLSession
-from scrape import scrape
 
-# scrapes a webpage and returns a list of resturants & their details
-def get():
-    # website to scrape data from
-    website = "https://www.happycow.net/oceania/australia/new_south_wales/sydney/"
-
-    return scrape(website)
-
-    # create html session to visit webpage
+def scrape(url: str) -> list:
+    # create html session to visit url
     session = HTMLSession()
     response = session.get(url)
     response.html.render(sleep=1, keep_page=True, scrolldown=1)
+
+    next = response.html.find(".next", first=True)
+    return next.absolute_links
 
     # keys: the fields of interest that will be saved to the DB, 
     # values: the selectors/filters that will be used to extract those fields from the DOM
@@ -35,7 +31,3 @@ def get():
                 details[key] = ""
         restaurants.append(details)
     return restaurants
-
-if __name__ == "__main__":
-    restaurants = get()
-    print(restaurants)
