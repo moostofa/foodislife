@@ -59,6 +59,7 @@ def get_restaurants():
             print("Maximum number of iterations reached. Stopping script.")
             break
     
+    # clear cache
     with open("cache.json", "w") as cachefile:
         pass
     print("Cleared cache.")
@@ -84,9 +85,9 @@ def scrape(venues: list, page_num: int) -> list:
         details = {}
         for key, filters in fields.items():
             try:
-                details[key] = venue.find(**filters)[0].text
+                details[key] = venue.find(**filters)[0].text.strip()
             except IndexError:
-                details[key] = ""
+                details[key] = "N/A"
         restaurants.append(details)
 
     # save this page's details in cache
@@ -125,14 +126,14 @@ def save(restaurants: list):
             cuisine, 
             phone
         )
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s);
         """
 
         # save each restaurant to DB
-        for r in restaurants:
+        for r in restaurants[1::]:          # [0] holds the page number so skip
             values = tuple(r.values())
             db.execute(insert, values)
-            db.commit()
+            conn.commit()
 
     finally:
         if conn is not None and conn.is_connected():

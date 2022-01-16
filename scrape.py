@@ -20,9 +20,9 @@ def scrape(venues: list, page_num: int) -> list:
         details = {}
         for key, filters in fields.items():
             try:
-                details[key] = venue.find(**filters)[0].text
+                details[key] = venue.find(**filters)[0].text.strip()
             except IndexError:
-                details[key] = ""
+                details[key] = "N/A"
         restaurants.append(details)
 
     # save this page's details in cache

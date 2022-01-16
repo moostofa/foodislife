@@ -29,14 +29,14 @@ def save(restaurants: list):
             cuisine, 
             phone
         )
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s);
         """
 
         # save each restaurant to DB
-        for r in restaurants:
+        for r in restaurants[1::]:          # [0] holds the page number so skip
             values = tuple(r.values())
             db.execute(insert, values)
-            db.commit()
+            conn.commit()
 
     finally:
         if conn is not None and conn.is_connected():
